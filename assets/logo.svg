@@ -1,0 +1,13 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" width="512" height="512" role="img" aria-label="Dux Translate">
+  <title>Dux Translate</title>
+  <rect width="512" height="512" rx="112" fill="#101418"/>
+  <g transform="translate(0 -22)">
+    <!-- back bubble: Latin -->
+    <rect x="76" y="96" width="232" height="196" rx="44" fill="#9ccbfb"/>
+    <path d="M108 280 L82 340 L164 288 Z" fill="#9ccbfb"/>
+    <path d="M146 248 L192 140 L238 248 M160 216 H224" fill="none" stroke="#101418" stroke-width="20" stroke-linecap="round" stroke-linejoin="round"/>
+    <!-- front bubble: CJK, outlined in the background colour so it cuts out of the back one -->
+    <path d="M248 220 H392 A44 44 0 0 1 436 264 V372 A44 44 0 0 1 392 416 L432 468 L340 416 H248 A44 44 0 0 1 204 372 V264 A44 44 0 0 1 248 220 Z" fill="#e2ecf8" stroke="#101418" stroke-width="14" stroke-linejoin="round"/>
+    <path d="M316 256 L326 274 M266 298 L374 290 M344 300 C334 334 316 358 286 380 M296 304 C308 336 330 360 358 378" fill="none" stroke="#101418" stroke-width="17" stroke-linecap="round" stroke-linejoin="round"/>
+  </g>
+</svg>
