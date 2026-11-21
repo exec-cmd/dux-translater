@@ -2,7 +2,7 @@ import QtQuick
 import Quickshell
 import Quickshell.Io
 import qs.Common
-import qs.Widgets
+import qs.DCommon.Widgets
 import qs.Modules.Plugins
 import "Providers.js" as Providers
 
@@ -23,12 +23,32 @@ PluginComponent {
     popoutWidth: 460
     popoutHeight: image ? 600 : 500
 
+    // Right click on the pill: translate the clipboard text and open the popout.
+    pillRightClickAction: () => clipboardText.running = true
+
+    Process {
+        id: clipboardText
+        command: ["dms", "cl", "paste"]
+        stdout: StdioCollector {
+            onStreamFinished: {
+                const clip = text.trim();
+                if (!clip)
+                    return;
+                root.inputText = clip;
+                root.image = null;
+                root.translate();
+                root.triggerPopout();
+            }
+        }
+    }
+
     onPluginServiceChanged: loadPair()
     onPluginIdChanged: loadPair()
 
     function loadPair() {
         if (!pluginService || !pluginId)
             return;
+        Providers.migrateLegacy(pluginService, pluginId);
         source = pluginService.loadPluginState(pluginId, "source", "auto");
         target = pluginService.loadPluginState(pluginId, "target", "en");
         recentPairs = pluginService.loadPluginState(pluginId, "recentPairs", []);
@@ -101,7 +121,7 @@ PluginComponent {
         interval: 15000
         onTriggered: {
             root.cancel();
-            root.errorText = "Request timed out.";
+            root.errorText = I18n.trFor("duxTranslate", "Request timed out.");
         }
     }
 
@@ -119,7 +139,7 @@ PluginComponent {
     }
 
     horizontalBarPill: Component {
-        DankIcon {
+        DIcon {
             name: "translate"
             size: Theme.iconSize - 6
             color: Theme.surfaceText
@@ -127,7 +147,7 @@ PluginComponent {
     }
 
     verticalBarPill: Component {
-        DankIcon {
+        DIcon {
             name: "translate"
             size: Theme.iconSize - 6
             color: Theme.surfaceText
@@ -136,8 +156,8 @@ PluginComponent {
 
     popoutContent: Component {
         PopoutComponent {
-            headerText: "Translate"
-            detailsText: "via " + Providers.providerNames[root.provider]
+            headerText: I18n.trFor("duxTranslate", "Translate")
+            detailsText: I18n.trFor("duxTranslate", "via %1").arg(Providers.providerNames[root.provider])
             showCloseButton: true
 
             Column {
@@ -149,7 +169,7 @@ PluginComponent {
                     width: parent.width
                     spacing: Theme.spacingS
 
-                    DankDropdown {
+                    DDropdown {
                         width: (parent.width - swapButton.width - parent.spacing * 2) / 2
                         dropdownWidth: width
                         enableFuzzySearch: true
@@ -158,11 +178,11 @@ PluginComponent {
                         onValueChanged: value => root.setPair(Providers.languageCode(value), root.target)
                     }
 
-                    DankActionButton {
+                    DActionButton {
                         id: swapButton
                         anchors.verticalCenter: parent.verticalCenter
                         iconName: "swap_horiz"
-                        tooltipText: "Swap languages"
+                        tooltipText: I18n.trFor("duxTranslate", "Swap languages")
                         enabled: root.source !== "auto"
                         opacity: enabled ? 1 : 0.4
                         onClicked: {
@@ -174,7 +194,7 @@ PluginComponent {
                         }
                     }
 
-                    DankDropdown {
+                    DDropdown {
                         width: (parent.width - swapButton.width - parent.spacing * 2) / 2
                         dropdownWidth: width
                         enableFuzzySearch: true
@@ -204,7 +224,7 @@ PluginComponent {
                             StyledText {
                                 id: chipLabel
                                 anchors.centerIn: parent
-                                text: (modelData.source === "auto" ? "Auto" : modelData.source.toUpperCase()) + " → " + modelData.target.toUpperCase()
+                                text: (modelData.source === "auto" ? I18n.trFor("duxTranslate", "Auto") : modelData.source.toUpperCase()) + " → " + modelData.target.toUpperCase()
                                 font.pixelSize: Theme.fontSizeSmall
                                 color: parent.current ? Theme.onPrimary : Theme.surfaceText
                             }
@@ -220,16 +240,25 @@ PluginComponent {
                     }
                 }
 
-                DankTextEdit {
+                DTextEdit {
                     id: input
                     width: parent.width
                     height: 110
-                    placeholderText: "Text to translate. Enter translates, Shift+Enter adds a line, Ctrl+V also pastes an image."
+                    placeholderText: I18n.trFor("duxTranslate", "Text to translate. Enter translates, Shift+Enter adds a line, Ctrl+V also pastes an image.")
                     keyForwardTargets: [keys]
                     onTextChanged: root.inputText = text
                     Component.onCompleted: {
                         text = root.inputText;
                         forceActiveFocus();
+                    }
+
+                    // The pill's right click sets inputText while the popout is already open.
+                    Connections {
+                        target: root
+                        function onInputTextChanged() {
+                            if (input.text !== root.inputText)
+                                input.text = root.inputText;
+                        }
                     }
                 }
 
@@ -260,46 +289,46 @@ PluginComponent {
                         source: root.image ? "data:" + root.image.mime + ";base64," + root.image.data : ""
                     }
 
-                    DankActionButton {
+                    DActionButton {
                         id: removeImage
                         anchors.right: parent.right
                         anchors.top: parent.top
                         iconName: "close"
-                        tooltipText: "Remove image"
+                        tooltipText: I18n.trFor("duxTranslate", "Remove image")
                         onClicked: root.image = null
                     }
                 }
 
-                DankTextEdit {
+                DTextEdit {
                     width: parent.width
                     height: 110
                     readOnly: true
                     text: root.errorText || root.resultText
                     textColor: root.errorText ? Theme.error : Theme.surfaceText
-                    placeholderText: root.busy ? "Translating…" : "Translation"
+                    placeholderText: root.busy ? I18n.trFor("duxTranslate", "Translating…") : I18n.trFor("duxTranslate", "Translation")
                 }
 
                 Row {
                     anchors.right: parent.right
                     spacing: Theme.spacingS
 
-                    DankButton {
-                        text: "Image"
+                    DButton {
+                        text: I18n.trFor("duxTranslate", "Image")
                         iconName: "image"
                         enabled: !imagePaste.running
                         onClicked: imagePaste.running = true
                     }
 
-                    DankButton {
-                        text: "Copy"
+                    DButton {
+                        text: I18n.trFor("duxTranslate", "Copy")
                         iconName: "content_copy"
                         enabled: root.resultText !== ""
                         opacity: enabled ? 1 : 0.4
                         onClicked: Quickshell.execDetached(["dms", "cl", "copy", root.resultText])
                     }
 
-                    DankButton {
-                        text: root.busy ? "Translating…" : "Translate"
+                    DButton {
+                        text: root.busy ? I18n.trFor("duxTranslate", "Translating…") : I18n.trFor("duxTranslate", "Translate")
                         iconName: "translate"
                         enabled: !root.busy && (root.inputText.trim() !== "" || root.image !== null)
                         opacity: enabled ? 1 : 0.4

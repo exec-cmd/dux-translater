@@ -1,6 +1,6 @@
 import QtQuick
 import qs.Common
-import qs.Widgets
+import qs.DCommon.Widgets
 
 // StringSetting with a masked field: the shell's StringSetting has no echoMode.
 Column {
@@ -44,7 +44,7 @@ Column {
         visible: root.description !== ""
     }
 
-    DankTextField {
+    DTextField {
         id: field
         width: parent.width
         showPasswordToggle: true

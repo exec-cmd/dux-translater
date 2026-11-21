@@ -80,3 +80,18 @@ test("recent pairs: newest first, deduplicated, capped at 4", () => {
     for (const t of ["ru", "de", "fr", "es", "de"]) r = P.pushRecent(r, "en", t);
     assert.equal(r.map(p => p.target).join(), "de,es,fr,ru");
 });
+
+test("legacy migration: copies missing keys from dmsTranslate, never overwrites", () => {
+    const data = { dmsTranslate: { provider: "deepl", deeplApiKey: "k", openrouterModel: "m" }, duxTranslate: { openrouterModel: "new" } };
+    const state = { dmsTranslate: { source: "ru", target: "en" }, duxTranslate: {} };
+    const service = {
+        loadPluginData: (id, key, def) => (data[id] && data[id][key] !== undefined ? data[id][key] : def),
+        savePluginData: (id, key, value) => { (data[id] ||= {})[key] = value; },
+        loadPluginState: (id, key, def) => (state[id] && state[id][key] !== undefined ? state[id][key] : def),
+        savePluginState: (id, key, value) => { (state[id] ||= {})[key] = value; }
+    };
+    assert.equal(P.migrateLegacy(service, "duxTranslate"), 4);
+    assert.deepEqual(data.duxTranslate, { openrouterModel: "new", provider: "deepl", deeplApiKey: "k" });
+    assert.deepEqual(state.duxTranslate, { source: "ru", target: "en" });
+    assert.equal(P.migrateLegacy(service, "duxTranslate"), 0);
+});

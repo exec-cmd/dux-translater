@@ -1,3 +1,4 @@
 .scratch/
 .qmlls.ini
 node_modules/
+/spec/

@@ -1,0 +1,101 @@
+{
+    "Translate": {
+        "Translate": "Перевести"
+    },
+    "via %1": {
+        "via %1": "через %1"
+    },
+    "Swap languages": {
+        "Swap languages": "Поменять языки местами"
+    },
+    "Text to translate. Enter translates, Shift+Enter adds a line, Ctrl+V also pastes an image.": {
+        "Text to translate. Enter translates, Shift+Enter adds a line, Ctrl+V also pastes an image.": "Текст для перевода. Enter переводит, Shift+Enter добавляет строку, Ctrl+V вставляет и изображение."
+    },
+    "Remove image": {
+        "Remove image": "Убрать изображение"
+    },
+    "Translating…": {
+        "Translating…": "Перевожу…"
+    },
+    "Translation": {
+        "Translation": "Перевод"
+    },
+    "Image": {
+        "Image": "Изображение"
+    },
+    "Copy": {
+        "Copy": "Копировать"
+    },
+    "Auto": {
+        "Auto": "Авто"
+    },
+    "Request timed out.": {
+        "Request timed out.": "Время ожидания запроса истекло."
+    },
+    "Enter: translate to %1 and copy": {
+        "Enter: translate to %1 and copy": "Enter: перевести на %1 и скопировать"
+    },
+    "Type the text to translate": {
+        "Type the text to translate": "Введите текст для перевода"
+    },
+    "Copied translation": {
+        "Copied translation": "Перевод скопирован"
+    },
+    "Provider": {
+        "Provider": "Провайдер"
+    },
+    "Google API key": {
+        "Google API key": "Ключ Google API"
+    },
+    "Google Cloud Console → Credentials, with the Cloud Translation API enabled.": {
+        "Google Cloud Console → Credentials, with the Cloud Translation API enabled.": "Google Cloud Console → Credentials, с включённым Cloud Translation API."
+    },
+    "DeepL API key": {
+        "DeepL API key": "Ключ DeepL API"
+    },
+    "Free keys end in :fx and use the Free endpoint automatically.": {
+        "Free keys end in :fx and use the Free endpoint automatically.": "Бесплатные ключи заканчиваются на :fx и сами используют бесплатный адрес API."
+    },
+    "OpenRouter API key": {
+        "OpenRouter API key": "Ключ OpenRouter API"
+    },
+    "OpenRouter model": {
+        "OpenRouter model": "Модель OpenRouter"
+    },
+    "Any model id from openrouter.ai/models.": {
+        "Any model id from openrouter.ai/models.": "Любой id модели с openrouter.ai/models."
+    },
+    "OpenRouter reasoning": {
+        "OpenRouter reasoning": "Рассуждение OpenRouter"
+    },
+    "How much the model thinks before answering. Off is fastest and cheapest; models that always reason ignore it or reject Off.": {
+        "How much the model thinks before answering. Off is fastest and cheapest; models that always reason ignore it or reject Off.": "Сколько модель думает перед ответом. «Выкл.» быстрее и дешевле всего; модели, которые рассуждают всегда, игнорируют настройку или отклоняют «Выкл.»."
+    },
+    "Model default": {
+        "Model default": "По умолчанию модели"
+    },
+    "Off": {
+        "Off": "Выкл."
+    },
+    "Minimal": {
+        "Minimal": "Минимальное"
+    },
+    "Low": {
+        "Low": "Низкое"
+    },
+    "Medium": {
+        "Medium": "Среднее"
+    },
+    "High": {
+        "High": "Высокое"
+    },
+    "Extra high": {
+        "Extra high": "Очень высокое"
+    },
+    "OpenRouter system prompt": {
+        "OpenRouter system prompt": "Системный промпт OpenRouter"
+    },
+    "{source} and {target} are replaced with language names.": {
+        "{source} and {target} are replaced with language names.": "{source} и {target} заменяются названиями языков."
+    }
+}

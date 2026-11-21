@@ -1,10 +1,10 @@
 #!/bin/sh
-# Remove the dmsTranslate plugin directory. Settings and API keys in plugin_settings.json stay.
+# Remove the duxTranslate plugin directory. Settings and API keys in plugin_settings.json stay.
 set -eu
 
-id=dmsTranslate
+id=duxTranslate
 config=${XDG_CONFIG_HOME:-$HOME/.config}
-for dest in "$config/dms/plugins/$id" "$config/DankMaterialShell/plugins/$id"; do
+for dest in "$config/dms/plugins/$id"; do
 	[ -e "$dest" ] || [ -L "$dest" ] || continue
 	if ! grep -q "\"id\": \"$id\"" "$dest/plugin.json" 2>/dev/null; then
 		echo "skip    $dest (not $id)" >&2

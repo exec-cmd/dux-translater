@@ -1,5 +1,5 @@
 #!/bin/sh
-# Install src/ as the dmsTranslate plugin of DankMaterialShell 1.x or Dux Shell 2.x.
+# Install src/ as the duxTranslate plugin of Dux Shell 2.x.
 set -eu
 
 usage() {
@@ -23,12 +23,20 @@ while [ $# -gt 0 ]; do
 	shift
 done
 
-id=dmsTranslate
+id=duxTranslate
 repo=$(cd "$(dirname "$0")" && pwd)
 config=${XDG_CONFIG_HOME:-$HOME/.config}
-# Dux Shell 2.x reads ~/.config/dms, DankMaterialShell 1.x ~/.config/DankMaterialShell.
-if [ -d "$config/dms" ]; then base=$config/dms/plugins; else base=$config/DankMaterialShell/plugins; fi
+base=$config/dms/plugins
 dest=$base/$id
+
+# Before 2.0 the plugin was dmsTranslate. Remove it, or both would show up in the shell.
+old=$base/dmsTranslate
+if { [ -e "$old" ] || [ -L "$old" ]; } && { [ ! -e "$old/plugin.json" ] || grep -q '"id": "dmsTranslate"' "$old/plugin.json"; }; then
+	rm -rf "$old"
+	echo "removed old plugin $old"
+	echo "migrate: enable Dux Translate in Settings -> Plugins; settings and keys are copied on first load."
+	echo "         add the Dux Translate widget to the bar again and change the keybind id to $id."
+fi
 
 if [ -e "$dest" ] || [ -L "$dest" ]; then
 	if [ "$force" -eq 0 ] && ! grep -q "\"id\": \"$id\"" "$dest/plugin.json" 2>/dev/null; then

@@ -60,6 +60,33 @@ function pushRecent(recent, source, target) {
     return out;
 }
 
+// Before 2.0 the plugin id was dmsTranslate; settings and state stay under that id after the rename.
+var legacyId = "dmsTranslate";
+var settingKeys = ["provider", "googleApiKey", "deeplApiKey", "openrouterApiKey", "openrouterModel", "openrouterReasoning", "openrouterPrompt"];
+var stateKeys = ["source", "target", "recentPairs"];
+
+// Copies stored values from the old id into id, never over a value id already has.
+// service is the shell's PluginService. Returns the number of copied values.
+function migrateLegacy(service, id) {
+    var copied = 0;
+    function copy(isState, keys) {
+        for (var i = 0; i < keys.length; i++) {
+            var old = isState ? service.loadPluginState(legacyId, keys[i], undefined) : service.loadPluginData(legacyId, keys[i], undefined);
+            var cur = isState ? service.loadPluginState(id, keys[i], undefined) : service.loadPluginData(id, keys[i], undefined);
+            if (old === undefined || cur !== undefined)
+                continue;
+            if (isState)
+                service.savePluginState(id, keys[i], old);
+            else
+                service.savePluginData(id, keys[i], old);
+            copied++;
+        }
+    }
+    copy(false, settingKeys);
+    copy(true, stateKeys);
+    return copied;
+}
+
 function providerOf(settings) {
     return providerNames[settings.provider] ? settings.provider : defaultProvider;
 }
@@ -118,7 +145,7 @@ function buildRequest(settings, text, source, target, image) {
         headers: {
             "Content-Type": "application/json",
             "Authorization": "Bearer " + key,
-            "X-OpenRouter-Title": "DMS Translate"
+            "X-OpenRouter-Title": "Dux Translate"
         },
         body: JSON.stringify(request)
     };

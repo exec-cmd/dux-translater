@@ -1,17 +1,24 @@
 {
-    "id": "dmsTranslate",
-    "name": "Translate",
-    "description": "Top bar translator using Google Cloud Translation, DeepL or OpenRouter",
-    "version": "1.0.0",
+    "id": "duxTranslate",
+    "name": "Dux Translate",
+    "description": "Translator for the top bar and the launcher: Google Cloud Translation, DeepL or OpenRouter",
+    "version": "2.0.0",
     "author": "exec-cmd",
     "license": "MIT",
     "icon": "translate",
-    "type": "widget",
-    "component": "./Widget.qml",
+    "type": "composite",
+    "capabilities": ["dankbar-widget", "launcher", "clipboard"],
+    "components": {
+        "widget": "./Widget.qml",
+        "launcher": "./Launcher.qml"
+    },
+    "trigger": "tr ",
     "settings": "./Settings.qml",
-    "requires_dms": ">=1.6.3",
+    "requires_dms": ">=2.0.0",
     "permissions": [
         "settings_read",
-        "settings_write"
+        "settings_write",
+        "process",
+        "network"
     ]
 }
